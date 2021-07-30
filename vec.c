@@ -15,6 +15,11 @@ vec3* vec__create(double x, double y, double z) {
     return new;
 }
 
+vec3 vec__copy(vec3* v) {
+    vec3 new = {v->x, v->y, v->z};
+    return new;
+}
+
 double vec__x(vec3* v) {
     return v->x;
 }
