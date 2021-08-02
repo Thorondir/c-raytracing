@@ -14,21 +14,30 @@ double hit_sphere(vec3* centre, double radius, ray* r) {
     // det = b^2 - 4ac
     vec3 temp = vec__copy(&r->orig);
     vec__sub(&temp, centre); // A-C
-    double b = 2*vec__dot(&r->dir, &temp);
-    double ac = vec__dot(&r->dir, &r->dir) * vec__dot(&temp, &temp) - pow(radius, 2);
-    double determinant = sqrt(pow(b, 2) - 4 * ac);
+    double half_b = vec__dot(&r->dir, &temp);
+    double a = vec__dot(&r->dir, &r->dir);
+    double c = vec__dot(&temp, &temp) - pow(radius, 2);
+    double discriminant = pow(half_b, 2) -  a * c;
 
-    return determinant > 0;
+    if (discriminant < 0) {
+        return -1.0;
+    } else {
+        return (-half_b - sqrt(discriminant)) / (2.0*a);
+    }
 }
 
 colour ray_colour(ray* r) {
     vec3 centre = {0,0,-1};
-    if (hit_sphere(&centre, 0.5, r)) {
-        colour c = {1,0,0};
+    double t = hit_sphere(&centre, 0.5, r);
+    if (t > 0.0) {
+        vec3 N = vec__unit(ray__at(r, t));
+        vec__sub(&N, &centre);
+        colour c = {N.x + 1, N.y + 1, N.z + 1};
+        vec__mul_scalar(&c, 0.5);
         return c;
     }
     vec3 unit_direction = vec__unit(&r->dir);
-    double t = 0.5*(unit_direction.y + 1);
+    t = 0.5*(unit_direction.y + 1);
     colour c = {1-t * 1 + 0.5*t, 1-t * 1 + 0.7*t, 1-t * 1 + t};
     return c;
 }

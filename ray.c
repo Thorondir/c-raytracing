@@ -1,6 +1,7 @@
 #include "ray.h"
 
-vec3* ray__at(ray* r, double t) {
-    vec3* new = vec__create(r->orig.x + t * r->dir.x, r->orig.y + t * r->dir.y, r->orig.z + t * r->dir.z);
-    return new;
+void ray__at(vec3* v, ray* r, double t) {
+    v->x = r->orig.x + t * r->dir.x;
+    v->y = r->orig.y + t * r->dir.y;
+    v->z = r->orig.z + t * r->dir.z;
 }

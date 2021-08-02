@@ -8,6 +8,6 @@ typedef struct {
     vec3 dir;
 } ray;
 
-vec3* ray__at(ray*, double);
+void ray__at(vec3*, ray*, double);
 
 #endif
